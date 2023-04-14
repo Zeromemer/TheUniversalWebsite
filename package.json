@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "tsc && node src",
-    "dev": "nodemon --exec 'tsc && node src'"
+    "dev": "nodemon --ext \"ts,json\" --exec \"tsc && node src || exit 1\""
   },
   "repository": {
     "type": "git",
@@ -20,7 +20,9 @@
   },
   "homepage": "https://github.com/Zeromemer/TheUniversalWebsite#readme",
   "dependencies": {
-    "express.js": "^1.0.0"
+    "dotenv": "^16.0.3",
+    "express.js": "^1.0.0",
+    "openai": "^3.2.1"
   },
   "devDependencies": {
     "@types/express": "^4.17.17",
