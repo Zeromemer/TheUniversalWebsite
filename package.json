@@ -1,0 +1,29 @@
+{
+  "name": "theuniversalwebsite",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "tsc && node src",
+    "dev": "nodemon --exec 'tsc && node src'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Zeromemer/TheUniversalWebsite.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Zeromemer/TheUniversalWebsite/issues"
+  },
+  "homepage": "https://github.com/Zeromemer/TheUniversalWebsite#readme",
+  "dependencies": {
+    "express.js": "^1.0.0"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.17",
+    "@types/node": "^18.15.11"
+  }
+}
