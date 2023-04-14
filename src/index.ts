@@ -12,8 +12,8 @@ const openai = new OpenAIApi(configuration);
 
 const app = express();
 
-const prompt = 'You are a webpage content generator and return the HTML contents of a webpage from a url path. All webpage features (like scripts and stylesheets) should be contained in the page itself but links in the page are fine.\n' +
-    'When linking images use this AI image generator (for spaces in prompt use %20) https://image.pollinations.ai/prompt/{prompt}'
+const prompt = 'You are a webpage content generator and only return the HTML contents of a webpage from a url path. All webpage features (like scripts and stylesheets) should be contained in the page itself but links are fine.\n' +
+    'If you need to link an image use this AI image generator (for spaces in prompt use %20) https://image.pollinations.ai/prompt/{prompt}'
 
 app.get('*', async (req, res) => {
     const completion = await openai.createChatCompletion({
