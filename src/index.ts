@@ -25,7 +25,7 @@ app.get('*', async (req, res) => {
     });
     const response = completion.data.choices[0].message?.content;
 
-    console.log(response);
+    console.log(`${req.url}: ${response}`);
 
     res.send(response);
 });
