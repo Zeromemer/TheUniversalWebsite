@@ -15,6 +15,10 @@ const app = express();
 const prompt = 'You are a webpage content generator and only return the HTML contents of a webpage from a url path. All webpage features (like scripts and stylesheets) shouldn\'t be within the page itself and not linked to.\n' +
     'If you need to link an image use this AI image generator (for spaces in prompt use %20) https://image.pollinations.ai/prompt/{prompt}'
 
+app.get('/favicon.ico', (req, res) => {
+    res.status(404).send();
+});
+
 app.get('*', async (req, res) => {
     const completion = await openai.createChatCompletion({
         model: 'gpt-3.5-turbo',
