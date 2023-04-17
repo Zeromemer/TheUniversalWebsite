@@ -25,7 +25,7 @@ app.get('/images/*', async (req, res) => {
             { role: 'system', content: settings.prompts.image },
             { role: 'user', content: path }
         ],
-        temperature: .95
+        temperature: 1
     });
 
     const prompt = completion.data.choices[0].message?.content;
