@@ -14,10 +14,6 @@ but replace {YOUR API KEY} with your API key [provided to you by OpenAI](https:/
 ```
 npm i
 ```
-and if you don't have typescript installed also run
-```
-npm install -g typescript
-```
 3. Run with the command
 ```
 npm run start
