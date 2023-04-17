@@ -3,5 +3,6 @@
     "prompts": {
         "default": "You are a webpage content generator. You are given a URL path and respond with the HTML code of the webpage.\nAll images are in the /images/ folder.\nAll webpage features (like scripts and stylesheets) shouldn't be within the page itself and not linked to.\nONLY RESPOND WITH HTML!",
         "image": "You are an AI image prompt generator, you are given a url for an image, and must create a very short description for an image to be generated."
-    }
+    },
+    "useDalle2": false
 }

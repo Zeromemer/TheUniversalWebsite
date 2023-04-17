@@ -36,7 +36,22 @@ app.get('/images/*', async (req, res) => {
         throw new Error('No prompt');
     }
 
-    res.redirect(`https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}`);
+    let url = '';
+
+    if (settings.useDalle2) {
+        const response = await openai.createImage({
+            prompt,
+            n: 1,
+            size: "256x256",
+        });
+
+        url = response.data.data[0].url;
+    } else {
+        url = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}`;
+    }
+
+    console.log(`image ${path} url: ${url}`);
+    res.redirect(url);
 });
 
 app.get('/favicon.ico', (req, res) => {
