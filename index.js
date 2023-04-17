@@ -1,9 +1,13 @@
 import express from 'express';
 import { config as dotEnvConfig } from 'dotenv';
 import { Configuration, OpenAIApi } from 'openai';
+import { readFileSync } from 'fs';
 dotEnvConfig();
 
 const PORT = 3000;
+
+const settings = JSON.parse(readFileSync('settings.json'));
+console.log('settings:', settings);
 
 const configuration = new Configuration({
     apiKey: process.env.OPENAI_KEY,
@@ -12,21 +16,13 @@ const openai = new OpenAIApi(configuration);
 
 const app = express();
 
-const prompts = {
-    default: 'You are a webpage content generator. You are given a URL path and respond with the HTML code of the webpage.\n' +
-    'All images are in the /images/ folder.\n' +
-    'All webpage features (like scripts and stylesheets) shouldn\'t be within the page itself and not linked to.\n' +
-    'ONLY RESPOND WITH HTML!',
-    image: 'You are an AI image prompt generator, you are given a url for an image, and must create a very short description for an image to be generated.'
-};
-
 app.get('/images/*', async (req, res) => {
     const path = req.url.substring(7);
 
     const completion = await openai.createChatCompletion({
         model: 'gpt-3.5-turbo',
         messages: [
-            { role: 'system', content: prompts.image },
+            { role: 'system', content: settings.prompts.image },
             { role: 'user', content: path }
         ],
         temperature: .95
@@ -51,7 +47,7 @@ app.get('*', async (req, res) => {
     const completion = await openai.createChatCompletion({
         model: 'gpt-3.5-turbo',
         messages: [
-            { role: 'system', content: prompts.default },
+            { role: 'system', content: settings.prompts.default },
             { role: 'user', content: req.url }
         ],
     });
