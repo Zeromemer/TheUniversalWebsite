@@ -20,7 +20,7 @@ app.get('/images/*', async (req, res) => {
     const path = req.url.substring(7);
 
     const completion = await openai.createChatCompletion({
-        model: 'gpt-3.5-turbo',
+        model: settings.model,
         messages: [
             { role: 'system', content: settings.prompts.image },
             { role: 'user', content: path }
@@ -45,7 +45,7 @@ app.get('/favicon.ico', (req, res) => {
 
 app.get('*', async (req, res) => {
     const completion = await openai.createChatCompletion({
-        model: 'gpt-3.5-turbo',
+        model: settings.model,
         messages: [
             { role: 'system', content: settings.prompts.default },
             { role: 'user', content: req.url }
