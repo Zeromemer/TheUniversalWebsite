@@ -65,12 +65,26 @@ app.get('*', async (req, res) => {
             { role: 'system', content: settings.prompts.default },
             { role: 'user', content: req.url }
         ],
+        stream: true,
+    }, { responseType: 'stream' });
+    
+    res.type('html');
+    let whole = '';
+    completion.data.on('data', data => {
+        const lines = data.toString().split('\n').filter(line => line.trim() !== '');
+        for (const line of lines) {
+            const message = line.replace(/^data: /, '');
+            if (message === '[DONE]') {
+                console.log(`${req.url}: ${whole}`);
+                res.end();
+                return;
+            }
+            const parsed = JSON.parse(message);
+    
+            whole += parsed.choices[0].delta.content ?? "";
+            res.write(parsed.choices[0].delta.content ?? "");
+        }
     });
-    const response = completion.data.choices[0].message?.content;
-
-    console.log(`${req.url}: ${response}`);
-
-    res.send(response);
 });
 
 app.listen(PORT, () => {
