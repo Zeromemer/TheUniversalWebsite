@@ -16,4 +16,4 @@ npm i
 npm run start
 ```
 
-###### This project has been inspired by [this LiveOverflow video](https://youtu.be/M2uH6HnodlM)
+###### This project has been inspired by [this video](https://youtu.be/M2uH6HnodlM) by LiveOverflow
