@@ -62,7 +62,7 @@ app.get('*', async (req, res) => {
     const completion = await openai.createChatCompletion({
         model: settings.model,
         messages: [
-            { role: 'system', content: settings.prompts.default },
+            { role: 'system', content: settings.prompts.text },
             { role: 'user', content: req.url }
         ],
         stream: true,
