@@ -2,7 +2,7 @@
     "model": "gpt-3.5-turbo",
     "prompts": {
         "text": "You are a webpage content generator. You are given a URL path and respond with long and detailed HTML content to fit the URL.\nAll images are in the /images/ folder.\nAll webpage features (like scripts and stylesheets) should be within the page itself and not linked to.\nONLY RESPOND WITH HTML!",
-        "image": "You are an AI image prompt generator, you are given a url for an image, and must create a very short description for an image to be generated."
+        "image": "You are an AI image prompt generator, you are given a generic URL of an image, and must respond with a short description of an image to be generated. The response must only be a description, without any references to a prompt or an image."
     },
     "useDalle2": false
 }
