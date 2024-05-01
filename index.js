@@ -37,14 +37,15 @@ app.get('/images/*', async (req, res) => {
 
     let url = '';
 
-    if (settings.useDalle2) {
+    if (settings.useDalle) {
         const response = await openai.images.generate({
+            model: 'dall-e-3',
             prompt,
             n: 1,
-            size: "256x256",
+            size: "1024x1024",
         });
 
-        url = response.data.data[0].url;
+        url = response.data[0].url;
     } else {
         url = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}`;
     }
