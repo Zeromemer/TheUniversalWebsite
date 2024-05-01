@@ -1,6 +1,6 @@
 import express from 'express';
 import { config as dotEnvConfig } from 'dotenv';
-import { Configuration, OpenAIApi } from 'openai';
+import OpenAI from 'openai';
 import { readFileSync } from 'fs';
 dotEnvConfig();
 
@@ -9,17 +9,16 @@ const PORT = 3000;
 const settings = JSON.parse(readFileSync('settings.json'));
 console.log('settings:', settings);
 
-const configuration = new Configuration({
-    apiKey: process.env.OPENAI_KEY,
+const openai = new OpenAI({
+    apiKey: process.env.OPENAI_KEY
 });
-const openai = new OpenAIApi(configuration);
 
 const app = express();
 
 app.get('/images/*', async (req, res) => {
     const path = req.url.substring(7);
 
-    const completion = await openai.createChatCompletion({
+    const completion = await openai.chat.completions.create({
         model: settings.model,
         messages: [
             { role: 'system', content: settings.prompts.image },
@@ -28,7 +27,7 @@ app.get('/images/*', async (req, res) => {
         temperature: 1.5
     });
 
-    const prompt = completion.data.choices[0].message?.content;
+    const prompt = completion.choices[0].message.content;
 
     console.log(`image ${path} prompt: ${prompt}`);
 
@@ -39,7 +38,7 @@ app.get('/images/*', async (req, res) => {
     let url = '';
 
     if (settings.useDalle2) {
-        const response = await openai.createImage({
+        const response = await openai.images.generate({
             prompt,
             n: 1,
             size: "256x256",
@@ -59,32 +58,27 @@ app.get('/favicon.ico', (req, res) => {
 });
 
 app.get('*', async (req, res) => {
-    const completion = await openai.createChatCompletion({
+    const stream = await openai.chat.completions.create({
         model: settings.model,
         messages: [
             { role: 'system', content: settings.prompts.text },
             { role: 'user', content: req.url }
         ],
         stream: true,
-    }, { responseType: 'stream' });
+    });
     
     res.type('html');
     let whole = '';
-    completion.data.on('data', data => {
-        const lines = data.toString().split('\n').filter(line => line.trim() !== '');
-        for (const line of lines) {
-            const message = line.replace(/^data: /, '');
-            if (message === '[DONE]') {
-                console.log(`${req.url}: ${whole}`);
-                res.end();
-                return;
-            }
-            const parsed = JSON.parse(message);
-    
-            whole += parsed.choices[0].delta.content ?? "";
-            res.write(parsed.choices[0].delta.content ?? "");
+    for await (const data of stream) {
+        const content = data?.choices[0]?.delta?.content;
+        if (content !== undefined) {
+            res.write(content);
+            whole += content;
+        } else {
+            console.log(`${req.url}: ${whole}`);
+            res.end();
         }
-    });
+    }
 });
 
 app.listen(PORT, () => {
